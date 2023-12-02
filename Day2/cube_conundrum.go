@@ -22,28 +22,52 @@ func main() {
 		return
 	}
 
-	config := Hand{
-		red:   12,
-		green: 13,
-		blue:  14,
-	}
+	// config := Hand{
+	// 	red:   12,
+	// 	green: 13,
+	// 	blue:  14,
+	// }
 	inputReader := bufio.NewReader(file)
+
+	// sum := 0
+	// for game, err := inputReader.ReadString('\n'); err == nil; game, err = inputReader.ReadString('\n') {
+	// 	hands := getGameHands(game)
+	// 	isValidGame := true
+	// 	for _, hand := range hands {
+	// 		if !isValidHand(hand, config) {
+	// 			isValidGame = false
+	// 			break
+	// 		}
+	// 	}
+	// 	if isValidGame {
+	// 		sum += getGameId(game)
+	// 	}
+	// }
 
 	sum := 0
 	for game, err := inputReader.ReadString('\n'); err == nil; game, err = inputReader.ReadString('\n') {
 		hands := getGameHands(game)
-		isValidGame := true
-		for _, hand := range hands {
-			if !isValidHand(hand, config) {
-				isValidGame = false
-				break
-			}
-		}
-		if isValidGame {
-			sum += getGameId(game)
-		}
+		minimumHand := getMinimumHand(hands)
+		print(minimumHand.red)
+		print(minimumHand.green)
+		println(minimumHand.blue)
+		sum += minimumHand.red * minimumHand.blue * minimumHand.green
 	}
 	println(sum)
+}
+
+func getMinimumHand(hands []Hand) Hand {
+	minimumHand := Hand{
+		red:   0,
+		green: 0,
+		blue:  0,
+	}
+	for _, hand := range hands {
+		minimumHand.red = max(minimumHand.red, hand.red)
+		minimumHand.green = max(minimumHand.green, hand.green)
+		minimumHand.blue = max(minimumHand.blue, hand.blue)
+	}
+	return minimumHand
 }
 
 func getGameId(game string) int {
